@@ -19,6 +19,7 @@ public class Coordinates {
     private int y;
 
     @JsonValue
+    @Override
     public String toString() {
         return String.format("x=%d,y=%d", x, y);
     }
