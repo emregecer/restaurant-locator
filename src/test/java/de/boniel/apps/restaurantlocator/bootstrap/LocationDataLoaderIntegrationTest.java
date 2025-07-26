@@ -27,20 +27,20 @@ class LocationDataLoaderIntegrationTest {
 
     @Test
     void shouldLoadLocationsFromJsonAndCallService() throws Exception {
-        //Will read restaurants.json from resources
+        // Will read restaurants.json from resources
         LocationDataLoader spyLoader = spy(loader);
 
         try (InputStream ignored = spyLoader.loadResource()) {
             spyLoader.run(mock(ApplicationArguments.class));
 
             ArgumentCaptor<LocationDto> captor = ArgumentCaptor.forClass(LocationDto.class);
-            verify(locationService, atLeastOnce()).upsertLocation(any(UUID.class), captor.capture());
+            verify(locationService, times(21)).upsertLocation(any(UUID.class), captor.capture());
 
-            LocationDto captured = captor.getValue();
-            assertEquals("Sushi Bar", captured.getName());
+            LocationDto captured = captor.getValue(); //Will capture the last location processed
+            assertEquals("Kebab Kingdom", captured.getName());
             assertEquals("Restaurant", captured.getType());
-            assertEquals("x=5,y=5", captured.getCoordinates());
-            assertEquals(1, captured.getRadius());
+            assertEquals("x=7,y=3", captured.getCoordinates());
+            assertEquals(7, captured.getRadius());
         }
     }
 }

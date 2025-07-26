@@ -36,4 +36,13 @@ public class LocationUtils {
     public static String toCoordinateString(int x, int y) {
         return "x=" + x + ",y=" + y;
     }
+
+    public static boolean isWithinRadius(int fromX, int fromY, int radius, int toX, int toY) {
+        double distance = calculateDistance(fromX, fromY, toX, toY);
+        return distance <= radius;
+    }
+
+    public static double calculateDistance(int fromX, int fromY, int toX, int toY) {
+        return Math.sqrt(Math.pow(fromX - toX, 2) + Math.pow(fromY - toY, 2));
+    }
 }
