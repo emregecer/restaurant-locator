@@ -3,6 +3,8 @@ package de.boniel.apps.restaurantlocator.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.service.LocationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @ContextConfiguration(classes = LocationController.class)
@@ -53,6 +54,40 @@ class LocationControllerTest {
                 .andExpect(jsonPath("$[0].name").value("Fire Tiger"))
                 .andExpect(jsonPath("$[0].coordinates").value("x=2,y=3"))
                 .andExpect(jsonPath("$[0].opening-hours").value("10:00AM-11:00PM"));
+    }
+
+    @Test
+    void shouldSearchNearbyLocations() throws Exception {
+        int x = 1;
+        int y = 3;
+        Coordinates coordinates = new Coordinates(x, y);
+
+        LocationSearchResultDto loc1 = LocationSearchResultDto.builder()
+                .id(UUID.randomUUID())
+                .name("Location 1")
+                .build();
+
+        LocationSearchResponseDto mockResponse = LocationSearchResponseDto.builder()
+                .userLocation(coordinates)
+                .locations(List.of(loc1))
+                .build();
+
+        when(locationService.searchNearbyLocations(any(Coordinates.class)))
+                .thenReturn(mockResponse);
+
+        mockMvc.perform(get("/v1/locations/search")
+                        .param("x", String.valueOf(x))
+                        .param("y", String.valueOf(y))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.user-location").value(coordinates.toString()))
+                .andExpect(jsonPath("$.locations").isArray())
+                .andExpect(jsonPath("$.locations[0].name").value(loc1.getName()));
+
+        verify(locationService).searchNearbyLocations(argThat(coords ->
+                coords.getX() == x && coords.getY() == y
+        ));
     }
 
     @Test

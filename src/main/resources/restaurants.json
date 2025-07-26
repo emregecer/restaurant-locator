@@ -49,7 +49,7 @@
     "type": "Restaurant",
     "opening-hours": "10:00AM-12:00AM",
     "image": "https://tinyurl.com/burgerhub",
-    "coordinates": "x=1,y=4",
+    "coordinates": "x=1,y=3",
     "radius": 5
   },
   {

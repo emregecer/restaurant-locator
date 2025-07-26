@@ -1,6 +1,5 @@
-package de.boniel.apps.restaurantlocator.model;
+package de.boniel.apps.restaurantlocator.dto;
 
-import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import org.junit.jupiter.api.Test;
 
@@ -11,24 +10,23 @@ class CoordinatesTest {
 
     @Test
     void toString_ShouldReturnFormattedString() {
-        Coordinates coords = new Coordinates(2, 3);
-        assertThat(coords.toString()).isEqualTo("x=2,y=3");
+        assertThat(new Coordinates(2, 3).toString()).isEqualTo("x=2,y=3");
     }
 
     @Test
     void fromString_ShouldParseValidString() {
-        Coordinates coords = Coordinates.fromString("x=2,y=3");
+        Coordinates coordinates = Coordinates.fromString("x=2,y=3");
 
-        assertThat(coords.getX()).isEqualTo(2);
-        assertThat(coords.getY()).isEqualTo(3);
+        assertThat(coordinates.getX()).isEqualTo(2);
+        assertThat(coordinates.getY()).isEqualTo(3);
     }
 
     @Test
     void fromString_ShouldParseValidStringWithSpaces() {
-        Coordinates coords = Coordinates.fromString("x= 10 , y= 20");
+        Coordinates coordinates = Coordinates.fromString("x= 10 , y= 20");
 
-        assertThat(coords.getX()).isEqualTo(10);
-        assertThat(coords.getY()).isEqualTo(20);
+        assertThat(coordinates.getX()).isEqualTo(10);
+        assertThat(coordinates.getY()).isEqualTo(20);
     }
 
     @Test

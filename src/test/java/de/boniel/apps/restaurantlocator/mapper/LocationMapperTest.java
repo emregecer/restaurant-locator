@@ -2,11 +2,16 @@ package de.boniel.apps.restaurantlocator.mapper;
 
 import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.model.Location;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationMapperTest {
@@ -54,6 +59,80 @@ class LocationMapperTest {
         assertEquals(20, dto.getCoordinates().getY());
     }
 
+    @Test
+    void shouldMapSingleLocationSearchResponseDtoCorrectly() {
+        Coordinates userCoordinates = new Coordinates(3, 2);
+
+        Location location = Location.builder()
+                .id(UUID.randomUUID())
+                .name("Deseado Steakhaus")
+                .xCoordinate(2)
+                .yCoordinate(2)
+                .radius(5)
+                .build();
+
+        List<Location> locations = List.of(location);
+
+        LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, locations);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
+
+        assertThat(response.getLocations()).hasSize(1);
+
+        LocationSearchResultDto resultDto = response.getLocations().get(0);
+        assertThat(resultDto.getId()).isEqualTo(location.getId());
+        assertThat(resultDto.getName()).isEqualTo(location.getName());
+        assertThat(resultDto.getCoordinates().getX()).isEqualTo(2);
+        assertThat(resultDto.getCoordinates().getY()).isEqualTo(2);
+
+        // Distance between (3,2) and (2,2) = sqrt((3-2)^2 + (2-2)^2) = 1.0
+        assertThat(resultDto.getDistance()).isEqualTo(1.0);
+    }
+
+    @Test
+    void shouldMapToMultipleLocationResultsAndSortDistance() {
+        Coordinates userCoordinates = new Coordinates(3, 2);
+
+        List<Location> locations = List.of(
+                Location.builder()
+                        .id(UUID.randomUUID())
+                        .name("Loc1")
+                        .xCoordinate(2)
+                        .yCoordinate(2)
+                        .radius(5)
+                        .build(),
+                Location.builder()
+                        .id(UUID.randomUUID())
+                        .name("Loc2")
+                        .xCoordinate(2)
+                        .yCoordinate(3)
+                        .radius(5)
+                        .build()
+        );
+
+        LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, locations);
+
+        assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
+        assertThat(response.getLocations()).hasSize(2);
+
+        LocationSearchResultDto dto1 = response.getLocations().get(0);
+        LocationSearchResultDto dto2 = response.getLocations().get(1);
+
+        assertThat(dto1.getDistance()).isEqualTo(1.0);
+        assertThat(dto2.getDistance()).isCloseTo(1.1892, within(0.0001));
+    }
+
+    @Test
+    void shouldHandleEmptyLocationsList() {
+        Coordinates userCoordinates = new Coordinates(3, 2);
+
+        LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, List.of());
+
+        assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
+        assertThat(response.getLocations()).isEmpty();
+    }
+
     private Location sampleLocation() {
         return Location.builder()
                 .id(UUID.randomUUID())
@@ -66,5 +145,4 @@ class LocationMapperTest {
                 .image("http://image")
                 .build();
     }
-
 }

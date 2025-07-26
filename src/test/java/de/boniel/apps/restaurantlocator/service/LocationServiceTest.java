@@ -2,6 +2,8 @@ package de.boniel.apps.restaurantlocator.service;
 
 import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.model.Location;
 import de.boniel.apps.restaurantlocator.repository.LocationRepository;
@@ -17,6 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static de.boniel.apps.restaurantlocator.fault.ErrorType.LOCATION_NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -47,6 +51,53 @@ class LocationServiceTest {
 
         verify(repository).findAll();
     }
+
+    @Test
+    void shouldReturnOnlyNearbyLocationsSortedByDistance() {
+        Coordinates userCoordinates = new Coordinates(3, 2);
+
+        Location loc1 = Location.builder()
+                .id(UUID.randomUUID())
+                .name("Loc1")
+                .xCoordinate(2)
+                .yCoordinate(2)
+                .radius(2) // radius * radius = 4
+                .build(); // distance * distance = 1 → inside
+
+        Location loc2 = Location.builder()
+                .id(UUID.randomUUID())
+                .name("Loc2")
+                .xCoordinate(2)
+                .yCoordinate(3)
+                .radius(1) // radius * radius = 1
+                .build(); // distance * distance = 2 → OUTSIDE
+
+        Location loc3 = Location.builder()
+                .id(UUID.randomUUID())
+                .name("Loc3")
+                .xCoordinate(5)
+                .yCoordinate(2)
+                .radius(5) // radius * radius = 25
+                .build(); // distance * distance = 4 → inside
+
+        when(repository.findAll()).thenReturn(List.of(loc1, loc2, loc3));
+
+        LocationSearchResponseDto response = service.searchNearbyLocations(userCoordinates);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
+        assertThat(response.getLocations()).hasSize(2);
+
+        LocationSearchResultDto first = response.getLocations().get(0);
+        LocationSearchResultDto second = response.getLocations().get(1);
+
+        assertThat(first.getName()).isEqualTo(loc1.getName());
+        assertThat(first.getDistance()).isEqualTo(1.0);
+
+        assertThat(second.getName()).isEqualTo(loc3.getName());
+        assertThat(second.getDistance()).isCloseTo(1.41421, within(0.0001));
+    }
+
 
     @Test
     void shouldReturnLocationByIdAsDto() {

@@ -1,6 +1,8 @@
 package de.boniel.apps.restaurantlocator.controller;
 
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
 import de.boniel.apps.restaurantlocator.service.LocationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,6 +23,12 @@ public class LocationController {
     @GetMapping("/v1/locations")
     public List<LocationDto> getLocations() {
         return locationService.findAll();
+    }
+
+    @Operation(summary = "searchNearbyLocations", description = "Search locations within a radius of the locations")
+    @GetMapping("/v1/locations/search")
+    public LocationSearchResponseDto searchNearbyLocations(@RequestParam int x, @RequestParam int y) {
+        return locationService.searchNearbyLocations(new Coordinates(x, y));
     }
 
     @Operation(summary = "getLocationById")

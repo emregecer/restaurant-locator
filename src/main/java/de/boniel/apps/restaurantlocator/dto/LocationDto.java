@@ -24,6 +24,7 @@ import java.util.UUID;
 @Setter
 public class LocationDto {
 
+    //Getting the id from the URL as path variable already, but still keeping it here for the response
     private UUID id;
 
     @NotEmpty

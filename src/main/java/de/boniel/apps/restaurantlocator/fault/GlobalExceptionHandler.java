@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -52,6 +54,7 @@ public class GlobalExceptionHandler {
         return ErrorBody.builder()
                 .errorCode(errorType.getCode())
                 .errorMessage(message)
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 

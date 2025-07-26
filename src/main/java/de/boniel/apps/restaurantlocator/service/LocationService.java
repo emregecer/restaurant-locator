@@ -1,6 +1,8 @@
 package de.boniel.apps.restaurantlocator.service;
 
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
+import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.mapper.LocationMapper;
 import de.boniel.apps.restaurantlocator.model.Location;
@@ -10,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static de.boniel.apps.restaurantlocator.fault.ErrorType.INVALID_RADIUS;
 import static de.boniel.apps.restaurantlocator.fault.ErrorType.LOCATION_NOT_FOUND;
 
 @Service
@@ -27,6 +29,15 @@ public class LocationService {
         return locationRepository.findAll().stream()
                 .map(LocationMapper.INSTANCE::mapToLocationDto)
                 .toList();
+    }
+
+    public LocationSearchResponseDto searchNearbyLocations(Coordinates userCoordinates) {
+        List<Location> nearbyLocations = locationRepository.findAll().stream()
+                .filter(location -> location.calculateDistanceSquared(userCoordinates) <= location.calculateSquared())
+                .sorted(Comparator.comparingDouble(location -> location.calculateDistanceSquared(userCoordinates)))
+                .toList();
+
+        return LocationMapper.INSTANCE.mapToLocationSearchResponseDto(userCoordinates, nearbyLocations);
     }
 
     public LocationDto upsertLocation(UUID id, @Valid LocationDto request) {
