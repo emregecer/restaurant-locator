@@ -24,6 +24,18 @@ class LocationUtilsTest {
     }
 
     @Test
+    void shouldParseValidXCoordinateWithSpace() {
+        int x = LocationUtils.parseCoordinate("x = 10 , y = 20", true);
+        assertEquals(10, x);
+    }
+
+    @Test
+    void shouldParseValidYCoordinateWithSpace() {
+        int y = LocationUtils.parseCoordinate("x = 10 , y = 20", false);
+        assertEquals(20, y);
+    }
+
+    @Test
     void shouldThrowForNullCoordinate() {
         ApiException ex = assertThrows(ApiException.class, () ->
                 LocationUtils.parseCoordinate(null, true)
@@ -53,12 +65,6 @@ class LocationUtilsTest {
                 LocationUtils.parseCoordinate("x=-5,y=10", true)
         );
         assertEquals(ErrorType.INVALID_COORDINATE, ex.getErrorType());
-    }
-
-    @Test
-    void shouldReturnCoordinateString() {
-        String result = LocationUtils.toCoordinateString(5, 7);
-        assertEquals("x=5,y=7", result);
     }
 
     @ParameterizedTest

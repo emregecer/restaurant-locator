@@ -39,7 +39,8 @@ class LocationDataLoaderIntegrationTest {
             LocationDto captured = captor.getValue(); //Will capture the last location processed
             assertEquals("Kebab Kingdom", captured.getName());
             assertEquals("Restaurant", captured.getType());
-            assertEquals("x=7,y=3", captured.getCoordinates());
+            assertEquals(7, captured.getCoordinates().getX());
+            assertEquals(3, captured.getCoordinates().getY());
             assertEquals(7, captured.getRadius());
         }
     }

@@ -38,17 +38,8 @@ public class LocationDataLoader implements ApplicationRunner {
 
             locations.forEach(location -> {
                 try {
-                    LocationDto locationDto = LocationDto.builder()
-                            .name(location.getName())
-                            .type(location.getType())
-                            .image(location.getImage())
-                            .openingHours(location.getOpeningHours())
-                            .coordinates(location.getCoordinates())
-                            .radius(location.getRadius())
-                            .build();
-
-                    locationService.upsertLocation(UUID.randomUUID(), locationDto);
-                    log.info("Location {} is loaded successfully. ID: {}", locationDto.getName(), location.getId());
+                    locationService.upsertLocation(UUID.randomUUID(), location);
+                    log.info("Location {} is loaded successfully. ID: {}", location.getName(), location.getId());
                 } catch (Exception ex) {
                     log.error("Skipping invalid location {} -> {}", location.getName(), ex.getMessage());
                 }

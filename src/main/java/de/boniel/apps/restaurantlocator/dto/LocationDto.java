@@ -1,6 +1,8 @@
 package de.boniel.apps.restaurantlocator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.boniel.apps.restaurantlocator.model.Coordinates;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,8 +32,9 @@ public class LocationDto {
     @NotEmpty
     private String type;
 
-    @NotEmpty
-    private String coordinates;
+    @Valid
+    @NotNull
+    private Coordinates coordinates;
 
     @NotNull
     @Positive

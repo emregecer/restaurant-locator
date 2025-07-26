@@ -1,6 +1,5 @@
 package de.boniel.apps.restaurantlocator.model;
 
-import de.boniel.apps.restaurantlocator.utils.LocationUtils;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,7 +20,4 @@ public class Location {
     private String openingHours;
     private String image;
 
-    public String getCoordinateString() {
-        return LocationUtils.toCoordinateString(xCoordinate, yCoordinate);
-    }
 }

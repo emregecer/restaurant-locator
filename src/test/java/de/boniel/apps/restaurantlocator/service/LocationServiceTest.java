@@ -2,6 +2,7 @@ package de.boniel.apps.restaurantlocator.service;
 
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
+import de.boniel.apps.restaurantlocator.model.Coordinates;
 import de.boniel.apps.restaurantlocator.model.Location;
 import de.boniel.apps.restaurantlocator.repository.LocationRepository;
 import org.junit.jupiter.api.Test;
@@ -80,7 +81,7 @@ class LocationServiceTest {
                 .type("Restaurant")
                 .openingHours("09-21")
                 .image("img")
-                .coordinates("x=15,y=25")
+                .coordinates(new Coordinates(15, 25))
                 .radius(3)
                 .build();
 
@@ -104,7 +105,7 @@ class LocationServiceTest {
                 .type("Restaurant")
                 .openingHours("09-21")
                 .image("img")
-                .coordinates("x=5,y=7")
+                .coordinates(new Coordinates(5, 7))
                 .radius(0)
                 .build();
 

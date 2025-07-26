@@ -1,15 +1,13 @@
 package de.boniel.apps.restaurantlocator.mapper;
 
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
-import de.boniel.apps.restaurantlocator.fault.ApiException;
-import de.boniel.apps.restaurantlocator.fault.ErrorType;
+import de.boniel.apps.restaurantlocator.model.Coordinates;
 import de.boniel.apps.restaurantlocator.model.Location;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LocationMapperTest {
 
@@ -24,7 +22,7 @@ class LocationMapperTest {
                 .type("Restaurant")
                 .openingHours("09:00AM-10:00PM")
                 .image("http://image")
-                .coordinates("x=10,y=20")
+                .coordinates(new Coordinates(10, 20))
                 .radius(5)
                 .build();
 
@@ -41,46 +39,6 @@ class LocationMapperTest {
     }
 
     @Test
-    void shouldThrowApiExceptionForInvalidCoordinateFormat() {
-        UUID id = UUID.randomUUID();
-
-        LocationDto request = LocationDto.builder()
-                .name("Invalid Location")
-                .type("Restaurant")
-                .openingHours("09:00AM-10:00PM")
-                .image("http://image")
-                .coordinates("10,20")
-                .radius(5)
-                .build();
-
-        ApiException ex = assertThrows(ApiException.class,
-                () -> mapper.mapToLocation(id, request)
-        );
-
-        assertEquals(ErrorType.INVALID_COORDINATE, ex.getErrorType());
-    }
-
-    @Test
-    void shouldThrowApiExceptionForNegativeCoordinates() {
-        UUID id = UUID.randomUUID();
-
-        LocationDto request = LocationDto.builder()
-                .name("Negative Location")
-                .type("Restaurant")
-                .openingHours("09:00AM-10:00PM")
-                .image("http://image")
-                .coordinates("x=-5,y=7")
-                .radius(5)
-                .build();
-
-        ApiException ex = assertThrows(ApiException.class,
-                () -> mapper.mapToLocation(id, request)
-        );
-
-        assertEquals(ErrorType.INVALID_COORDINATE, ex.getErrorType());
-    }
-
-    @Test
     void shouldMapLocationToDtoWithCoordinates() {
         Location location = sampleLocation();
 
@@ -92,7 +50,8 @@ class LocationMapperTest {
         assertEquals(location.getOpeningHours(), dto.getOpeningHours());
         assertEquals(location.getImage(), dto.getImage());
 
-        assertEquals("x=10,y=20", dto.getCoordinates());
+        assertEquals(10, dto.getCoordinates().getX());
+        assertEquals(20, dto.getCoordinates().getY());
     }
 
     private Location sampleLocation() {
