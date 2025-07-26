@@ -1,7 +1,6 @@
 package de.boniel.apps.restaurantlocator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.boniel.apps.restaurantlocator.model.Coordinates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,5 +1,6 @@
 package de.boniel.apps.restaurantlocator.model;
 
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import org.junit.jupiter.api.Test;
 

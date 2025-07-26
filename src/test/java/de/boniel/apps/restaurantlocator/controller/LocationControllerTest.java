@@ -1,8 +1,8 @@
 package de.boniel.apps.restaurantlocator.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
-import de.boniel.apps.restaurantlocator.model.Coordinates;
 import de.boniel.apps.restaurantlocator.service.LocationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package de.boniel.apps.restaurantlocator.model;
+package de.boniel.apps.restaurantlocator.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

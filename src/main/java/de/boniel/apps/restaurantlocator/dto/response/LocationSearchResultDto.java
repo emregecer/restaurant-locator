@@ -1,6 +1,6 @@
 package de.boniel.apps.restaurantlocator.dto.response;
 
-import de.boniel.apps.restaurantlocator.model.Coordinates;
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

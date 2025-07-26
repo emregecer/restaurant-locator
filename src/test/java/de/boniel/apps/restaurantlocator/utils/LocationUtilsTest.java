@@ -1,8 +1,8 @@
 package de.boniel.apps.restaurantlocator.utils;
 
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.fault.ErrorType;
-import de.boniel.apps.restaurantlocator.model.Coordinates;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

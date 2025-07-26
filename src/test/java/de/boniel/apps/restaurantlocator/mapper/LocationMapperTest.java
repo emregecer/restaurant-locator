@@ -1,7 +1,7 @@
 package de.boniel.apps.restaurantlocator.mapper;
 
+import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
-import de.boniel.apps.restaurantlocator.model.Coordinates;
 import de.boniel.apps.restaurantlocator.model.Location;
 import org.junit.jupiter.api.Test;
 
