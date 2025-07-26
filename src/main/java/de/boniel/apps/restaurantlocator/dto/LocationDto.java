@@ -1,0 +1,45 @@
+package de.boniel.apps.restaurantlocator.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.util.UUID;
+
+/**
+ * Data Transfer Object for Location information.
+ * As an improvement, it can be separated as "LocationRequestDto" and "LocationResponseDto" if necessary.
+ * For simplicity, this class is used for both request and responses.
+ */
+@SuperBuilder
+@NoArgsConstructor
+@Getter
+@Setter
+public class LocationDto {
+
+    private UUID id;
+
+    @NotEmpty
+    private String name;
+
+    @NotEmpty
+    private String type;
+
+    @NotEmpty
+    private String coordinates;
+
+    @NotNull
+    @Positive
+    private Integer radius;
+
+    @JsonProperty("opening-hours")
+    private String openingHours;
+
+    private String image;
+
+}

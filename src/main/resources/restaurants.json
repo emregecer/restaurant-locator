@@ -1,0 +1,191 @@
+[
+  {
+    "id": "21e1545c-8b65-4d83-82f9-7fcad4a23114",
+    "name": "Deseado Steakhaus",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-10:00PM",
+    "image": "https://tinyurl.com/steak",
+    "coordinates": "x=2,y=2",
+    "radius": 3
+  },
+  {
+    "id": "20e1545c-8b65-4d83-82f9-7fcad4a23115",
+    "name": "Fire Tiger",
+    "type": "Restaurant",
+    "opening-hours": "10:00AM-11:00PM",
+    "image": "https://tinyurl.com/tiger",
+    "coordinates": "x=2,y=3",
+    "radius": 6
+  },
+  {
+    "id": "30e1545c-8b65-4d83-82f9-7fcad4a23116",
+    "name": "Sushi Bar",
+    "type": "Restaurant",
+    "opening-hours": "09:00AM-09:00PM",
+    "image": "https://tinyurl.com/sushi",
+    "coordinates": "x=5,y=5",
+    "radius": 2
+  },
+  {
+    "id": "41e1545c-8b65-4d83-82f9-7fcad4a23117",
+    "name": "Green Garden",
+    "type": "Restaurant",
+    "opening-hours": "08:00AM-08:00PM",
+    "image": "https://tinyurl.com/greengarden",
+    "coordinates": "x=3,y=1",
+    "radius": 4
+  },
+  {
+    "id": "51e1545c-8b65-4d83-82f9-7fcad4a23118",
+    "name": "Pasta Palace",
+    "type": "Restaurant",
+    "opening-hours": "11:30AM-09:30PM",
+    "image": "https://tinyurl.com/pasta",
+    "coordinates": "x=4,y=2",
+    "radius": 3
+  },
+  {
+    "id": "61e1545c-8b65-4d83-82f9-7fcad4a23119",
+    "name": "Burger Hub",
+    "type": "Restaurant",
+    "opening-hours": "10:00AM-12:00AM",
+    "image": "https://tinyurl.com/burgerhub",
+    "coordinates": "x=1,y=4",
+    "radius": 5
+  },
+  {
+    "id": "71e1545c-8b65-4d83-82f9-7fcad4a23120",
+    "name": "Curry Corner",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-10:00PM",
+    "image": "https://tinyurl.com/currycorner",
+    "coordinates": "x=6,y=3",
+    "radius": 5
+  },
+  {
+    "id": "81e1545c-8b65-4d83-82f9-7fcad4a23121",
+    "name": "Taco Town",
+    "type": "Restaurant",
+    "opening-hours": "09:00AM-11:00PM",
+    "image": "https://tinyurl.com/tacotown",
+    "coordinates": "x=5,y=1",
+    "radius": 3
+  },
+  {
+    "id": "91e1545c-8b65-4d83-82f9-7fcad4a23122",
+    "name": "Pizza Plaza",
+    "type": "Restaurant",
+    "opening-hours": "10:00AM-11:00PM",
+    "image": "https://tinyurl.com/pizzaplaza",
+    "coordinates": "x=4,y=4",
+    "radius": 7
+  },
+  {
+    "id": "a1e1545c-8b65-4d83-82f9-7fcad4a23123",
+    "name": "Seafood Shack",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-09:00PM",
+    "image": "https://tinyurl.com/seafoodshack",
+    "coordinates": "x=7,y=2",
+    "radius": 5
+  },
+  {
+    "id": "b1e1545c-8b65-4d83-82f9-7fcad4a23124",
+    "name": "Vegan Vibes",
+    "type": "Restaurant",
+    "opening-hours": "08:00AM-08:00PM",
+    "image": "https://tinyurl.com/veganvibes",
+    "coordinates": "x=3,y=5",
+    "radius": 3
+  },
+  {
+    "id": "c1e1545c-8b65-4d83-82f9-7fcad4a23125",
+    "name": "BBQ Barn",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-10:30PM",
+    "image": "https://tinyurl.com/bbqbarn",
+    "coordinates": "x=2,y=6",
+    "radius": 6
+  },
+  {
+    "id": "d1e1545c-8b65-4d83-82f9-7fcad4a23126",
+    "name": "Dumpling Den",
+    "type": "Restaurant",
+    "opening-hours": "10:30AM-09:30PM",
+    "image": "https://tinyurl.com/dumplingden",
+    "coordinates": "x=6,y=5",
+    "radius": 4
+  },
+  {
+    "id": "e1e1545c-8b65-4d83-82f9-7fcad4a23127",
+    "name": "Noodle Nest",
+    "type": "Restaurant",
+    "opening-hours": "09:00AM-09:00PM",
+    "image": "https://tinyurl.com/noodlenest",
+    "coordinates": "x=5,y=6",
+    "radius": 5
+  },
+  {
+    "id": "f1e1545c-8b65-4d83-82f9-7fcad4a23128",
+    "name": "Waffle Works",
+    "type": "Restaurant",
+    "opening-hours": "07:00AM-03:00PM",
+    "image": "https://tinyurl.com/waffleworks",
+    "coordinates": "x=1,y=7",
+    "radius": 2
+  },
+  {
+    "id": "f1e1545c-8b65-4d83-82f9-7fcad4a23129",
+    "name": "Mediterranean Magic",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-10:00PM",
+    "image": "https://tinyurl.com/medmagic",
+    "coordinates": "x=7,y=7",
+    "radius": 6
+  },
+  {
+    "id": "a1e1545c-8b65-4d83-82f9-7fcad4a23130",
+    "name": "Bagel Bros",
+    "type": "Restaurant",
+    "opening-hours": "06:30AM-02:00PM",
+    "image": "https://tinyurl.com/bagelbros",
+    "coordinates": "x=2,y=7",
+    "radius": 2
+  },
+  {
+    "id": "b1e1545c-8b65-4d83-82f9-7fcad4a23131",
+    "name": "Crepe Cafe",
+    "type": "Restaurant",
+    "opening-hours": "08:00AM-05:00PM",
+    "image": "https://tinyurl.com/crepecafe",
+    "coordinates": "x=3,y=6",
+    "radius": 3
+  },
+  {
+    "id": "a1e1545c-8b65-4d83-82f9-7fcad4a23132",
+    "name": "Steak Street",
+    "type": "Restaurant",
+    "opening-hours": "11:00AM-11:00PM",
+    "image": "https://tinyurl.com/steakstreet",
+    "coordinates": "x=6,y=7",
+    "radius": 5
+  },
+  {
+    "id": "e1e1545c-8b65-4d83-82f9-7fcad4a23133",
+    "name": "Breakfast Bay",
+    "type": "Restaurant",
+    "opening-hours": "06:00AM-12:00PM",
+    "image": "https://tinyurl.com/breakfastbay",
+    "coordinates": "x=1,y=1",
+    "radius": 3
+  },
+  {
+    "id": "c1e1545c-8b65-4d83-82f9-7fcad4a23134",
+    "name": "Kebab Kingdom",
+    "type": "Restaurant",
+    "opening-hours": "10:00AM-11:30PM",
+    "image": "https://tinyurl.com/kebabkingdom",
+    "coordinates": "x=7,y=3",
+    "radius": 7
+  }
+]
