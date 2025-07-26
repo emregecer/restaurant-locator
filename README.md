@@ -1,6 +1,6 @@
 # restaurant-locator
 
-A Spring Boot application to locate restaurants
+A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
 During the application startup, locations.json is loaded from the classpath into an in-memory repository.
