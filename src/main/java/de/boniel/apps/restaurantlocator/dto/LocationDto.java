@@ -2,6 +2,7 @@ package de.boniel.apps.restaurantlocator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.boniel.apps.restaurantlocator.model.Coordinates;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -32,10 +33,18 @@ public class LocationDto {
     @NotEmpty
     private String type;
 
+    @Schema(
+            description = "Coordinates in the format x=<non-negative>,y=<non-negative>",
+            example = "x=2,y=3"
+    )
     @Valid
     @NotNull
     private Coordinates coordinates;
 
+    @Schema(
+            description = "Should be a positive integer representing the radius in meters.",
+            example = "x=2,y=3"
+    )
     @NotNull
     @Positive
     private Integer radius;
