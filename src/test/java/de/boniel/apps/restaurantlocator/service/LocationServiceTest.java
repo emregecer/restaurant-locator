@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static de.boniel.apps.restaurantlocator.fault.ErrorType.INVALID_RADIUS;
 import static de.boniel.apps.restaurantlocator.fault.ErrorType.LOCATION_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LocationServiceTest {
@@ -96,27 +96,6 @@ class LocationServiceTest {
         assertEquals(15, saved.getXCoordinate());
         assertEquals(25, saved.getYCoordinate());
         assertEquals(3, saved.getRadius());
-    }
-
-    @Test
-    void shouldThrowApiExceptionForInvalidRadius() {
-        LocationDto request = LocationDto.builder()
-                .name("Bad Radius")
-                .type("Restaurant")
-                .openingHours("09-21")
-                .image("img")
-                .coordinates(new Coordinates(5, 7))
-                .radius(0)
-                .build();
-
-        ApiException ex = assertThrows(
-                ApiException.class,
-                () -> service.upsertLocation(TEST_ID, request)
-        );
-
-        assertEquals(INVALID_RADIUS, ex.getErrorType());
-
-        verify(repository, never()).save(any());
     }
 
     private Location sampleLocation() {

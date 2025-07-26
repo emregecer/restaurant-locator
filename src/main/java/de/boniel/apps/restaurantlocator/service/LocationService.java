@@ -29,12 +29,11 @@ public class LocationService {
                 .toList();
     }
 
-    public void upsertLocation(UUID id, @Valid LocationDto request) {
+    public LocationDto upsertLocation(UUID id, @Valid LocationDto request) {
         Location location = LocationMapper.INSTANCE.mapToLocation(id, request);
+        Location createdLocation = locationRepository.save(location);
 
-        validateLocation(location);
-
-        locationRepository.save(location);
+        return LocationMapper.INSTANCE.mapToLocationDto(createdLocation);
     }
 
     public LocationDto getLocationById(UUID id) {
@@ -45,11 +44,5 @@ public class LocationService {
 
     public int countLocations() {
         return locationRepository.count();
-    }
-
-    private void validateLocation(Location loc) {
-        if (loc.getRadius() <= 0) {
-            throw new ApiException(INVALID_RADIUS, "Radius must be > 0. Provided: " + loc.getRadius());
-        }
     }
 }

@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -88,12 +87,16 @@ class LocationControllerTest {
                 .radius(3)
                 .build();
 
+        when(locationService.upsertLocation(eq(id), any(LocationDto.class)))
+                .thenReturn(locationDto);
+
         mockMvc.perform(put("/v1/locations/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(locationDto)))
-                .andExpect(status().isOk());
-
-        verify(locationService).upsertLocation(eq(id), any(LocationDto.class));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Green Garden"))
+                .andExpect(jsonPath("$.type").value("Restaurant"))
+                .andExpect(jsonPath("$.coordinates").value("x=10,y=20"));
     }
 
     @Test

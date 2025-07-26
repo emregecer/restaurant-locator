@@ -12,7 +12,7 @@ public interface LocationRepository {
 
     Optional<Location> findById(UUID id);
 
-    void save(Location location);
+    Location save(Location location);
 
     int count();
 

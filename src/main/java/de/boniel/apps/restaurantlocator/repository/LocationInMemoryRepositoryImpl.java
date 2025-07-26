@@ -25,13 +25,15 @@ public class LocationInMemoryRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public void save(Location location) {
+    public Location save(Location location) {
         if (location.getId() == null) {
             location = location.toBuilder()
                     .id(UUID.randomUUID())
                     .build();
         }
         storage.put(location.getId(), location);
+
+        return location;
     }
 
     @Override

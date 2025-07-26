@@ -31,8 +31,8 @@ public class LocationController {
 
     @Operation(summary = "Insert or update a location")
     @PutMapping("/v1/locations/{id}")
-    public void upsertLocation(@PathVariable UUID id, @Valid @RequestBody LocationDto request) {
-        locationService.upsertLocation(id, request);
+    public LocationDto upsertLocation(@PathVariable UUID id, @Valid @RequestBody LocationDto request) {
+        return locationService.upsertLocation(id, request);
     }
 
 }
