@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 public enum ErrorType {
 
     INTERNAL_ERROR(1, HttpStatus.INTERNAL_SERVER_ERROR),
-    INVALID_COORDINATE(10, HttpStatus.BAD_REQUEST),
-    INVALID_RADIUS(20, HttpStatus.BAD_REQUEST),
-    LOCATION_NOT_FOUND(30, HttpStatus.NOT_FOUND);
+    VALIDATION_ERROR(2, HttpStatus.BAD_REQUEST),
+
+
+    INVALID_COORDINATE(50, HttpStatus.BAD_REQUEST),
+    INVALID_RADIUS(60, HttpStatus.BAD_REQUEST),
+    LOCATION_NOT_FOUND(70, HttpStatus.NOT_FOUND);
 
     private final int code;
     private final HttpStatus httpStatus;
