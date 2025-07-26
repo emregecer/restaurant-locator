@@ -1,6 +1,5 @@
 package de.boniel.apps.restaurantlocator.utils;
 
-import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.fault.ErrorType;
 import lombok.AccessLevel;
@@ -34,21 +33,5 @@ public class LocationUtils {
         }
 
         return value;
-    }
-
-    public static boolean isWithinRadius(Coordinates fromCoordinates, Coordinates toCoordinates, int radius) {
-        double distance = calculateDistance(
-                fromCoordinates.getX(), fromCoordinates.getY(), toCoordinates.getX(), toCoordinates.getY()
-        );
-        return distance <= radius;
-    }
-
-    public static boolean isWithinRadius(int fromX, int fromY, int radius, int toX, int toY) {
-        double distance = calculateDistance(fromX, fromY, toX, toY);
-        return distance <= radius;
-    }
-
-    public static double calculateDistance(int fromX, int fromY, int toX, int toY) {
-        return Math.sqrt(Math.pow(fromX - toX, 2) + Math.pow(fromY - toY, 2));
     }
 }
