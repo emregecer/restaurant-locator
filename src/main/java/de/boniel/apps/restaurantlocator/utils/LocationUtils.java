@@ -2,6 +2,7 @@ package de.boniel.apps.restaurantlocator.utils;
 
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.fault.ErrorType;
+import de.boniel.apps.restaurantlocator.model.Coordinates;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -29,13 +30,17 @@ public class LocationUtils {
         int value = Integer.parseInt(isX ? xPart : yPart);
 
         if (value < 0) {
-            throw new ApiException(
-                    ErrorType.INVALID_COORDINATE,
-                    "Coordinate must be non-negative, got: " + value
-            );
+            throw new ApiException(ErrorType.INVALID_COORDINATE, "Coordinate must be non-negative, got: " + value);
         }
 
         return value;
+    }
+
+    public static boolean isWithinRadius(Coordinates fromCoordinates, Coordinates toCoordinates, int radius) {
+        double distance = calculateDistance(
+                fromCoordinates.getX(), fromCoordinates.getY(), toCoordinates.getX(), toCoordinates.getY()
+        );
+        return distance <= radius;
     }
 
     public static boolean isWithinRadius(int fromX, int fromY, int radius, int toX, int toY) {
