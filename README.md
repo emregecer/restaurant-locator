@@ -20,7 +20,8 @@ A Spring Boot application to locate nearby restaurants
     - Sorting k elements (where k ≤ n, the ones passing filter)
     - Sorting is O(k log k) worst case
     - Overall complexity for searching is O(n + k log k) where n is the number of locations in the repository.
-- On **persistence** branch, the application uses a persistent repository (PostgreSQL) to store locations with spatial index.
+- On **persistence** branch, the application uses a persistent repository (PostgreSQL) to store locations with spatial index
+which allows for efficient querying of locations based on their coordinates.
 
 - For single responsibility and separation of concerns, the application is structured into layers:
   - Controller: Handles HTTP requests and responses.
@@ -39,7 +40,8 @@ A Spring Boot application to locate nearby restaurants
 - The PUT endpoint to insert/update location takes the id from the URL path as the resource identifier.
 
 ## Future Improvement Ideas
-- Currently, the API allows multiple locations at the same coordinates. No validation is being applied for it. A future enhancement could enforce uniqueness on the locations if the business rules require it (e.g., one location/restaurant per spot).
+- Currently, the API allows multiple locations at the same coordinates. No validation is being applied for it. 
+A future enhancement could enforce uniqueness on the locations if the business rules require it (e.g., one location/restaurant per spot).
 - Location types are currently in free text format. A future enhancement could introduce an enum for location types to ensure consistency and avoid typos.
 - Pagination can be necessary for very large datasets.
 - messages.properties can be used to support internationalization (i18n) and avoid hardcoding for error messages and other user-facing strings.
