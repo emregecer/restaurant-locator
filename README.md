@@ -4,7 +4,7 @@ A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
 - Just run RestaurantLocatorApplication with Java24 with `./mvnw spring-boot:run` command.
-- If you would like to run the application in a Docker container, you can build the Docker image with `./mvnw clean package` and then run it with `docker-compose up --build`.
+- If you would like to run the application in a Docker container, you can first build the application jar with `./mvnw clean package` and then run it with `docker-compose up --build`.
 - During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into an in-memory repository (LocationDataLoader).
 - Once the application is running, you can access the API documentation at http://localhost:8080/swagger-ui/index.html or http://localhost:8080/v3/api-docs.
 
@@ -57,4 +57,3 @@ A future enhancement could enforce uniqueness on the locations if the business r
 
 ## Additional Notes
 - "boniel" is intentionally misspelled on packages due to search engine / security reasons.
-- 
