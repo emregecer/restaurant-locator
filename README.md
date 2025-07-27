@@ -9,6 +9,7 @@ A Spring Boot application to locate nearby restaurants
 
 ## Technical Stack
 - Java 24
+- Maven 3+
 - Spring Boot 3.5.4
 - Postgis15 (PostgreSQL15 with spatial index) for persistence and spatial-indexed location coordinates
 - Spring Validator for validating incoming requests
