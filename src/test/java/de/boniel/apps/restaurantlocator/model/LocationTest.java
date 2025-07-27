@@ -60,7 +60,7 @@ public class LocationTest {
     }
 
     @Test
-    void shouldDetermineIfUserIsInsideRadius() {
+    void shouldDetermineGivenCoordinateIsInsideRadius() {
         Location location = Location.builder()
                 .xCoordinate(2)
                 .yCoordinate(2)
