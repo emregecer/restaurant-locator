@@ -27,7 +27,7 @@ A Spring Boot application to locate nearby restaurants
     - Fetches all locations from the repository and filter the locations by their distances to user (O(n))
     - Sorting k elements (where k ≤ n, the ones passing filter)
     - Sorting is O(k log k) worst case
-    - Overall complexity for searching is O(n + k log k) where n is the number of locations in the repository.
+    - Overall complexity: O(n) for filtering + O(m log m) for sorting ≈ O(n log n) in worst case.
 
 - For single responsibility and separation of concerns, the application is structured into layers:
   - Controller: Handles HTTP requests and responses.
