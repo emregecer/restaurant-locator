@@ -3,17 +3,17 @@
 A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
-- Just run RestaurantLocatorApplication with Java24 with `./mvnw spring-boot:run` command.
 - If you would like to run the application in a Docker container, you can build the Docker image with `./mvnw clean package` and then run it with `docker-compose up --build`.
-- During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into an in-memory repository (LocationDataLoader).
+- During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into Postgres database.
 - Once the application is running, you can access the API documentation at http://localhost:8080/swagger-ui/index.html or http://localhost:8080/v3/api-docs.
 
 ## Technical Stack
 - Java 24
 - Spring Boot 3.5.4
+- Postgis15 (PostgreSQL15 with spatial index) for persistence and spatial-indexed location coordinates
 - Spring Validator for validating incoming requests
 - Lombok and MapStruct for reducing boilerplate code
-- Junit 5, Mockito and AssertJ for unit and integration testing
+- Junit 5, Mockito, AssertJ and TestContainers for unit and integration testing
 - Swagger/OpenAPI 3.0 for API documentation
 - Docker for containerization
 
@@ -21,13 +21,15 @@ A Spring Boot application to locate nearby restaurants
 - The application is structured to support two Git branches:
   - **master**: Uses an in-memory repository for simplicity.
   - **spatial-index**: Uses a PostgreSQL database with a spatial index for efficient querying of locations based on coordinates.
-- This version of the application on the **master** branch will use an in-memory, non-persistent repository for storing locations (ConcurrentHashMap<UUID, Location>) for simplicity and avoid complexity. 
-  - O(1) for getting locations by their ids (direct access via UUID)
+
+
+- This version of the application on the **spatial-index** branch will use Postgis / PostgreSQL for storing locations. 
+
+  - O(1) for getting locations by their ids (direct access via UUID primary keys)
   - For searching nearby locations:
-    - Fetches all locations from the repository and filter the locations by their distances to user (O(n))
-    - Sorting k elements (where k ≤ n, the ones passing filter)
-    - Sorting is O(k log k) worst case
-    - Overall complexity: O(n) for filtering + O(m log m) for sorting ≈ O(n log n) in worst case.
+    - The query uses ST_DWithin() with a spatial index, which allows the database to quickly find all locations within the radius. This operation is approximately O(log n) on indexed spatial data. 
+    - The ORDER BY distance ASC is performed by the database, which sorts the filtered results. Sorting complexity is O(m log m) where m is the number of locations within the radius (typically much smaller than n). 
+    - Overall, this approach offloads the heavy computation and sorting to the database, leading to significantly better performance compared to in-memory filtering and sorting of all locations (O(n log n)).
 
 - For single responsibility and separation of concerns, the application is structured into layers:
   - Controller: Handles HTTP requests and responses.
@@ -56,4 +58,3 @@ A future enhancement could enforce uniqueness on the locations if the business r
 
 ## Additional Notes
 - "boniel" is intentionally misspelled on packages due to search engine / security reasons.
-- 
