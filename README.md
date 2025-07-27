@@ -3,16 +3,19 @@
 A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
-- Just run RestaurantLocatorApplication with Java24 with "./mvnw spring-boot:run" command.
-- During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into an in-memory repository.
-- Once the application is running, you can access the API documentation at `http://localhost:8080/swagger-ui/index.html` or `http://localhost:8080/v3/api-docs`.
+- Just run RestaurantLocatorApplication with Java24 with `./mvnw spring-boot:run` command.
+- If you would like to run the application in a Docker container, you can build the Docker image with `./mvnw clean package` and then run it with `docker-compose up --build`.
+- During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into an in-memory repository (LocationDataLoader).
+- Once the application is running, you can access the API documentation at http://localhost:8080/swagger-ui/index.html or http://localhost:8080/v3/api-docs.
 
 ## Technical Stack
 - Java 24
 - Spring Boot 3.5.4
 - Spring Validator for validating incoming requests
 - Lombok and MapStruct for reducing boilerplate code
+- Junit 5, Mockito and AssertJ for unit and integration testing
 - Swagger/OpenAPI 3.0 for API documentation
+- Docker for containerization
 
 ## Technical Notes
 - The application is structured to support two Git branches:
@@ -24,7 +27,7 @@ A Spring Boot application to locate nearby restaurants
     - Fetches all locations from the repository and filter the locations by their distances to user (O(n))
     - Sorting k elements (where k ≤ n, the ones passing filter)
     - Sorting is O(k log k) worst case
-    - Overall complexity for searching is O(n + k log k) where n is the number of locations in the repository.
+    - Overall complexity: O(n) for filtering + O(m log m) for sorting ≈ O(n log n) in worst case.
 
 - For single responsibility and separation of concerns, the application is structured into layers:
   - Controller: Handles HTTP requests and responses.
