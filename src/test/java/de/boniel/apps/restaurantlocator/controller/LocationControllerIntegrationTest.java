@@ -5,7 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.UUID;
 
@@ -14,10 +20,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@SpringBootTest
-//@AutoConfigureMockMvc
+@Testcontainers
+@SpringBootTest
+@AutoConfigureMockMvc
 public class LocationControllerIntegrationTest {
-/*
+
+    @Container
+    public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
+            DockerImageName.parse("postgis/postgis:15-3.4")
+                    .asCompatibleSubstituteFor("postgres")
+    )
+            .withDatabaseName("testdb")
+            .withUsername("postgres")
+            .withPassword("postgres");
+
+    @DynamicPropertySource
+    static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -48,16 +71,16 @@ public class LocationControllerIntegrationTest {
         UUID newId = UUID.randomUUID();
 
         String newLocationJson = """
-        {
-            "id": "%s",
-            "name": "Integration Test New Restaurant",
-            "type": "Restaurant",
-            "openingHours": "08:00-18:00",
-            "image": "http://newimage",
-            "coordinates": "x=15,y=25",
-            "radius": 4
-        }
-        """.formatted(newId);
+                {
+                    "id": "%s",
+                    "name": "Integration Test New Restaurant",
+                    "type": "Restaurant",
+                    "openingHours": "08:00-18:00",
+                    "image": "http://newimage",
+                    "coordinates": "x=15,y=25",
+                    "radius": 4
+                }
+                """.formatted(newId);
 
         mockMvc.perform(put("/v1/locations/{id}", newId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,6 +92,4 @@ public class LocationControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.coordinates").value("x=15,y=25"));
     }
-
- */
 }
