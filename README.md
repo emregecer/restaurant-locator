@@ -3,7 +3,7 @@
 A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
-- If you would like to run the application in a Docker container, you can build the Docker image with `./mvnw clean package` and then run it with `docker-compose up --build`.
+- You can build the Docker image with `./mvnw clean package` and then run it with `docker-compose up --build`.
 - During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into Postgres database.
 - Once the application is running, you can access the API documentation at http://localhost:8080/swagger-ui/index.html or http://localhost:8080/v3/api-docs.
 
