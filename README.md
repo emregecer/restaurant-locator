@@ -3,7 +3,7 @@
 A Spring Boot application to locate nearby restaurants
 
 ## Getting Started
-- Just run RestaurantLocatorApplication with Java24.
+- Just run RestaurantLocatorApplication with Java24 with "./mvnw spring-boot:run" command.
 - During the application startup, src/main/resources/restaurant.json will be loaded from the classpath into an in-memory repository.
 
 ## Technical Stack
@@ -41,6 +41,7 @@ A Spring Boot application to locate nearby restaurants
 ## Future Improvement Ideas
 - Currently, the API allows multiple locations at the same coordinates. No validation is being applied for it. A future enhancement could enforce uniqueness on the locations if the business rules require it (e.g., one location/restaurant per spot).
 - Location types are currently in free text format. A future enhancement could introduce an enum for location types to ensure consistency and avoid typos.
+- Pagination can be necessary for very large datasets.
 - messages.properties can be used to support internationalization (i18n) and avoid hardcoding for error messages and other user-facing strings.
 
 ## Additional Notes
