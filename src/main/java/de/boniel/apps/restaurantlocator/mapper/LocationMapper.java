@@ -18,6 +18,8 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Optional.ofNullable;
+
 @Mapper
 public interface LocationMapper {
 
@@ -29,8 +31,6 @@ public interface LocationMapper {
     @Mapping(target = "coordinates", source = "request.coordinates", qualifiedByName = "mapToCoordinates")
     Location mapToLocation(UUID id, LocationDto request);
 
-    @Mapping(target = "coordinates.x", source = "coordinates.x")
-    @Mapping(target = "coordinates.y", source = "coordinates.y")
     LocationDto mapToLocationDto(Location location);
 
     default LocationSearchResponseDto mapToLocationSearchResponseDto(Coordinates userCoordinates,
@@ -51,9 +51,8 @@ public interface LocationMapper {
 
     @Named("mapToCoordinates")
     default Point mapToCoordinates(Coordinates userCoordinates) {
-        if (userCoordinates == null) {
-            return null;
-        }
-        return geometryFactory.createPoint(new Coordinate(userCoordinates.getX(), userCoordinates.getY()));
+        return ofNullable(userCoordinates)
+                .map(coordinates -> geometryFactory.createPoint(new Coordinate(coordinates.getX(), coordinates.getY())))
+                .orElse(null);
     }
 }
