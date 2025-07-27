@@ -33,18 +33,12 @@ public class LocationDto {
     @NotEmpty
     private String type;
 
-    @Schema(
-            description = "Coordinates in the format x=<non-negative>,y=<non-negative>",
-            example = "x=2,y=3"
-    )
+    @Schema(description = "Coordinates in the format x=<non-negative>,y=<non-negative>", example = "x=2,y=3")
     @Valid
     @NotNull
     private Coordinates coordinates;
 
-    @Schema(
-            description = "Should be a positive integer representing the radius in meters.",
-            example = "x=2,y=3"
-    )
+    @Schema(description = "Should be a positive integer representing the radius in meters.", example = "3")
     @NotNull
     @Positive
     private Integer radius;
