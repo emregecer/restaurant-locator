@@ -130,8 +130,8 @@ class LocationServiceTest {
         Location saved = captor.getValue();
 
         assertEquals(TEST_ID, saved.getId());
-        assertEquals(15, saved.getCoords().getX());
-        assertEquals(25, saved.getCoords().getY());
+        assertEquals(15, saved.getCoordinates().getX());
+        assertEquals(25, saved.getCoordinates().getY());
         assertEquals(3, saved.getRadius());
     }
 
@@ -140,7 +140,7 @@ class LocationServiceTest {
                 .id(TEST_ID)
                 .name("Test Place")
                 .type("Restaurant")
-                .coords(geometryFactory.createPoint(new Coordinate(10, 20)))
+                .coordinates(geometryFactory.createPoint(new Coordinate(10, 20)))
                 .radius(5)
                 .openingHours("10-22")
                 .image("http://img")

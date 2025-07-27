@@ -26,11 +26,11 @@ public interface LocationMapper {
     GeometryFactory geometryFactory = new GeometryFactory();
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "coords", source = "request.coordinates", qualifiedByName = "mapToCoordinates")
+    @Mapping(target = "coordinates", source = "request.coordinates", qualifiedByName = "mapToCoordinates")
     Location mapToLocation(UUID id, LocationDto request);
 
-    @Mapping(target = "coordinates.x", source = "coords.x")
-    @Mapping(target = "coordinates.y", source = "coords.y")
+    @Mapping(target = "coordinates.x", source = "coordinates.x")
+    @Mapping(target = "coordinates.y", source = "coordinates.y")
     LocationDto mapToLocationDto(Location location);
 
     default LocationSearchResponseDto mapToLocationSearchResponseDto(Coordinates userCoordinates,
@@ -50,10 +50,10 @@ public interface LocationMapper {
     LocationSearchResultDto mapToLocationSearchResponseDto(LocationWithDistance location, @Context Coordinates userCoordinates);
 
     @Named("mapToCoordinates")
-    default Point mapToCoordinates(Coordinates coordinates) {
-        if (coordinates == null) {
+    default Point mapToCoordinates(Coordinates userCoordinates) {
+        if (userCoordinates == null) {
             return null;
         }
-        return geometryFactory.createPoint(new Coordinate(coordinates.getX(), coordinates.getY()));
+        return geometryFactory.createPoint(new Coordinate(userCoordinates.getX(), userCoordinates.getY()));
     }
 }

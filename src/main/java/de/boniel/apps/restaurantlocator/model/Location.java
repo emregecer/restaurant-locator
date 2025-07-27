@@ -34,7 +34,7 @@ public class Location {
 
     // PostGIS Point type with SRID 0 Euclidean coordinates)
     @Column(columnDefinition = "geometry(Point, 0)", nullable = false)
-    private Point coords;
+    private Point coordinates;
 
     @Column(nullable = false)
     private double radius;

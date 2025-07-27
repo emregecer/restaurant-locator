@@ -14,11 +14,11 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
     @Query(
             value = """
                             SELECT id, name,
-                            ST_X(coords) as x,
-                            ST_Y(coords) as y,
-                            ST_Distance(coords, ST_SetSRID(ST_MakePoint(:x, :y), 0)) as distance
+                            ST_X(coordinates) as x,
+                            ST_Y(coordinates) as y,
+                            ST_Distance(coordinates, ST_SetSRID(ST_MakePoint(:x, :y), 0)) as distance
                             FROM locations
-                            WHERE ST_DWithin(coords, ST_SetSRID(ST_MakePoint(:x, :y), 0), radius)
+                            WHERE ST_DWithin(coordinates, ST_SetSRID(ST_MakePoint(:x, :y), 0), radius)
                             ORDER BY distance ASC
                     """,
             nativeQuery = true

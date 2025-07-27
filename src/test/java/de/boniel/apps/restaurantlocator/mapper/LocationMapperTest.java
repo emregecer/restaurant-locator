@@ -44,8 +44,8 @@ class LocationMapperTest {
         assertEquals("Restaurant", location.getType());
         assertEquals("09:00AM-10:00PM", location.getOpeningHours());
         assertEquals("http://image", location.getImage());
-        assertEquals(10, location.getCoords().getX());
-        assertEquals(20, location.getCoords().getY());
+        assertEquals(10, location.getCoordinates().getX());
+        assertEquals(20, location.getCoordinates().getY());
         assertEquals(5, location.getRadius());
     }
 
@@ -142,7 +142,7 @@ class LocationMapperTest {
                 .id(UUID.randomUUID())
                 .name("Test Place")
                 .type("Restaurant")
-                .coords(geometryFactory.createPoint(new Coordinate(10, 20)))
+                .coordinates(geometryFactory.createPoint(new Coordinate(10, 20)))
                 .radius(5)
                 .openingHours("09:00-22:00")
                 .image("http://image")
