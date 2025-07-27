@@ -54,7 +54,7 @@ public class LocationTest {
                 .radius(3)
                 .build();
 
-        int radiusSq = location.calculateSquared();
+        int radiusSq = location.calculateRadiusSquared();
 
         assertThat(radiusSq).isEqualTo(9);
     }
@@ -69,12 +69,12 @@ public class LocationTest {
 
         Coordinates userCoordinates = new Coordinates(4, 3);
 
-        boolean insideRadius = location.calculateDistanceSquared(userCoordinates) <= location.calculateSquared();
+        boolean insideRadius = location.calculateDistanceSquared(userCoordinates) <= location.calculateRadiusSquared();
         assertThat(insideRadius).isTrue();
 
         Coordinates farUser = new Coordinates(10, 10);
 
-        boolean outsideRadius = location.calculateDistanceSquared(farUser) <= location.calculateSquared();
+        boolean outsideRadius = location.calculateDistanceSquared(farUser) <= location.calculateRadiusSquared();
         assertThat(outsideRadius).isFalse();
     }
 }

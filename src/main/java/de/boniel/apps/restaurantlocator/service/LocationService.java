@@ -33,7 +33,7 @@ public class LocationService {
 
     public LocationSearchResponseDto searchNearbyLocations(Coordinates userCoordinates) {
         List<Location> nearbyLocations = locationRepository.findAll().stream()
-                .filter(location -> location.calculateDistanceSquared(userCoordinates) <= location.calculateSquared())
+                .filter(location -> location.calculateDistanceSquared(userCoordinates) <= location.calculateRadiusSquared())
                 .sorted(Comparator.comparingDouble(location -> location.calculateDistanceSquared(userCoordinates)))
                 .toList();
 

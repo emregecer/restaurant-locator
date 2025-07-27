@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import static de.boniel.apps.restaurantlocator.fault.ErrorType.LOCATION_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -95,9 +94,8 @@ class LocationServiceTest {
         assertThat(first.getDistance()).isEqualTo(1.0);
 
         assertThat(second.getName()).isEqualTo(loc3.getName());
-        assertThat(second.getDistance()).isCloseTo(1.41421, within(0.0001));
+        assertThat(second.getDistance()).isEqualTo(2.0);
     }
-
 
     @Test
     void shouldReturnLocationByIdAsDto() {

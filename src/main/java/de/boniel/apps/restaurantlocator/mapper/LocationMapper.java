@@ -42,12 +42,11 @@ public interface LocationMapper {
     @Mapping(target = "coordinates.x", source = "XCoordinate")
     @Mapping(target = "coordinates.y", source = "YCoordinate")
     @Mapping(target = "distance", source = "location", qualifiedByName = "mapDistance")
-    LocationSearchResultDto mapToLocationSearchResponseDto(Location location,
-                                                           @Context Coordinates userCoordinates);
+    LocationSearchResultDto mapToLocationSearchResponseDto(Location location, @Context Coordinates userCoordinates);
 
     @Named("mapDistance")
     default double mapDistance(Location location, @Context Coordinates userCoordinates) {
-        return Math.sqrt(location.calculateDistance(userCoordinates));
+        return location.calculateDistance(userCoordinates);
     }
 
 }

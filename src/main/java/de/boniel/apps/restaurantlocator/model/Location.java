@@ -46,7 +46,7 @@ public class Location {
      * Helper method to calculate the squared radius of this location
      * @return The squared radius of this location.
      */
-    public int calculateSquared() {
+    public int calculateRadiusSquared() {
         return radius * radius;
     }
 }

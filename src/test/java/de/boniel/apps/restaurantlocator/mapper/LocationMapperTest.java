@@ -91,7 +91,7 @@ class LocationMapperTest {
     }
 
     @Test
-    void shouldMapToMultipleLocationResultsAndSortDistance() {
+    void shouldMapToMultipleLocationsWithDistances() {
         Coordinates userCoordinates = new Coordinates(3, 2);
 
         List<Location> locations = List.of(
@@ -100,7 +100,7 @@ class LocationMapperTest {
                         .name("Loc1")
                         .xCoordinate(2)
                         .yCoordinate(2)
-                        .radius(5)
+                        .radius(2)
                         .build(),
                 Location.builder()
                         .id(UUID.randomUUID())
@@ -120,7 +120,7 @@ class LocationMapperTest {
         LocationSearchResultDto dto2 = response.getLocations().get(1);
 
         assertThat(dto1.getDistance()).isEqualTo(1.0);
-        assertThat(dto2.getDistance()).isCloseTo(1.1892, within(0.0001));
+        assertThat(dto2.getDistance()).isCloseTo(1.41421, within(0.0001));
     }
 
     @Test
