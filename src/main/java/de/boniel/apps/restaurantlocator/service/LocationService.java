@@ -6,13 +6,13 @@ import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.mapper.LocationMapper;
 import de.boniel.apps.restaurantlocator.model.Location;
+import de.boniel.apps.restaurantlocator.model.LocationWithDistance;
 import de.boniel.apps.restaurantlocator.repository.LocationRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,10 +32,7 @@ public class LocationService {
     }
 
     public LocationSearchResponseDto searchNearbyLocations(Coordinates userCoordinates) {
-        List<Location> nearbyLocations = locationRepository.findAll().stream()
-                .filter(location -> location.calculateDistanceSquared(userCoordinates) <= location.calculateRadiusSquared())
-                .sorted(Comparator.comparingDouble(location -> location.calculateDistanceSquared(userCoordinates)))
-                .toList();
+        List<LocationWithDistance> nearbyLocations = locationRepository.findLocationsWithinRadiusWithDistance(userCoordinates.getX(), userCoordinates.getY());
 
         return LocationMapper.INSTANCE.mapToLocationSearchResponseDto(userCoordinates, nearbyLocations);
     }
@@ -53,7 +50,7 @@ public class LocationService {
                 .orElseThrow(() -> new ApiException(LOCATION_NOT_FOUND, "Location not found with ID: " + id));
     }
 
-    public int countLocations() {
+    public long countLocations() {
         return locationRepository.count();
     }
 }

@@ -5,18 +5,24 @@ import de.boniel.apps.restaurantlocator.dto.LocationDto;
 import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
 import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.model.Location;
+import de.boniel.apps.restaurantlocator.model.LocationWithDistance;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class LocationMapperTest {
 
     private final LocationMapper mapper = LocationMapper.INSTANCE;
+
+    private final GeometryFactory geometryFactory = new GeometryFactory();
 
     @Test
     void shouldMapValidCoordinatesToLocation() {
@@ -38,8 +44,8 @@ class LocationMapperTest {
         assertEquals("Restaurant", location.getType());
         assertEquals("09:00AM-10:00PM", location.getOpeningHours());
         assertEquals("http://image", location.getImage());
-        assertEquals(10, location.getXCoordinate());
-        assertEquals(20, location.getYCoordinate());
+        assertEquals(10, location.getCoords().getX());
+        assertEquals(20, location.getCoords().getY());
         assertEquals(5, location.getRadius());
     }
 
@@ -63,15 +69,15 @@ class LocationMapperTest {
     void shouldMapSingleLocationSearchResponseDtoCorrectly() {
         Coordinates userCoordinates = new Coordinates(3, 2);
 
-        Location location = Location.builder()
-                .id(UUID.randomUUID())
-                .name("Deseado Steakhaus")
-                .xCoordinate(2)
-                .yCoordinate(2)
-                .radius(5)
-                .build();
+        LocationWithDistance locationWithDistance = mock(LocationWithDistance.class);
 
-        List<Location> locations = List.of(location);
+        when(locationWithDistance.getId()).thenReturn(UUID.randomUUID());
+        when(locationWithDistance.getName()).thenReturn("Deseado Steakhaus");
+        when(locationWithDistance.getX()).thenReturn(2D);
+        when(locationWithDistance.getY()).thenReturn(2D);
+        when(locationWithDistance.getDistance()).thenReturn(5D);
+
+        List<LocationWithDistance> locations = List.of(locationWithDistance);
 
         LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, locations);
 
@@ -80,38 +86,36 @@ class LocationMapperTest {
 
         assertThat(response.getLocations()).hasSize(1);
 
-        LocationSearchResultDto resultDto = response.getLocations().get(0);
-        assertThat(resultDto.getId()).isEqualTo(location.getId());
-        assertThat(resultDto.getName()).isEqualTo(location.getName());
+        LocationSearchResultDto resultDto = response.getLocations().getFirst();
+        assertThat(resultDto.getId()).isEqualTo(locationWithDistance.getId());
+        assertThat(resultDto.getName()).isEqualTo(locationWithDistance.getName());
         assertThat(resultDto.getCoordinates().getX()).isEqualTo(2);
         assertThat(resultDto.getCoordinates().getY()).isEqualTo(2);
 
-        // Distance between (3,2) and (2,2) = sqrt((3-2)^2 + (2-2)^2) = 1.0
-        assertThat(resultDto.getDistance()).isEqualTo(1.0);
+        assertThat(resultDto.getDistance()).isEqualTo(5.0);
     }
 
     @Test
     void shouldMapToMultipleLocationsWithDistances() {
         Coordinates userCoordinates = new Coordinates(3, 2);
 
-        List<Location> locations = List.of(
-                Location.builder()
-                        .id(UUID.randomUUID())
-                        .name("Loc1")
-                        .xCoordinate(2)
-                        .yCoordinate(2)
-                        .radius(2)
-                        .build(),
-                Location.builder()
-                        .id(UUID.randomUUID())
-                        .name("Loc2")
-                        .xCoordinate(2)
-                        .yCoordinate(3)
-                        .radius(5)
-                        .build()
-        );
+        LocationWithDistance loc1 = mock(LocationWithDistance.class);
+        when(loc1.getId()).thenReturn(UUID.randomUUID());
+        when(loc1.getName()).thenReturn("Loc1");
+        when(loc1.getX()).thenReturn(2.0);
+        when(loc1.getY()).thenReturn(2.0);
+        when(loc1.getDistance()).thenReturn(1.5);
 
-        LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, locations);
+        LocationWithDistance loc2 = mock(LocationWithDistance.class);
+        when(loc2.getId()).thenReturn(UUID.randomUUID());
+        when(loc2.getName()).thenReturn("Loc2");
+        when(loc2.getX()).thenReturn(2.0);
+        when(loc2.getY()).thenReturn(3.0);
+        when(loc2.getDistance()).thenReturn(2.5);
+
+        List<LocationWithDistance> mockLocations = List.of(loc1, loc2);
+
+        LocationSearchResponseDto response = mapper.mapToLocationSearchResponseDto(userCoordinates, mockLocations);
 
         assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
         assertThat(response.getLocations()).hasSize(2);
@@ -119,8 +123,8 @@ class LocationMapperTest {
         LocationSearchResultDto dto1 = response.getLocations().get(0);
         LocationSearchResultDto dto2 = response.getLocations().get(1);
 
-        assertThat(dto1.getDistance()).isEqualTo(1.0);
-        assertThat(dto2.getDistance()).isCloseTo(1.41421, within(0.0001));
+        assertThat(dto1.getDistance()).isEqualTo(1.5);
+        assertThat(dto2.getDistance()).isEqualTo(2.5);
     }
 
     @Test
@@ -138,8 +142,7 @@ class LocationMapperTest {
                 .id(UUID.randomUUID())
                 .name("Test Place")
                 .type("Restaurant")
-                .xCoordinate(10)
-                .yCoordinate(20)
+                .coords(geometryFactory.createPoint(new Coordinate(10, 20)))
                 .radius(5)
                 .openingHours("09:00-22:00")
                 .image("http://image")

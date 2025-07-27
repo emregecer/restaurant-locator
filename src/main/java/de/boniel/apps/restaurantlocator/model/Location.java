@@ -1,52 +1,44 @@
 package de.boniel.apps.restaurantlocator.model;
 
-import de.boniel.apps.restaurantlocator.dto.Coordinates;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.locationtech.jts.geom.Point;
 
 import java.util.UUID;
 
-@Builder(toBuilder = true)
+@Entity
+@Table(name = "locations")
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
 @Getter
-@EqualsAndHashCode
+@Setter
 public class Location {
 
+    @Id
     private UUID id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, length = 100)
     private String type;
-    private int xCoordinate;
-    private int yCoordinate;
-    private int radius;
-    private String openingHours;
+
+    @Column(length = 500)
     private String image;
 
-    /**
-     * Helper method to calculate the squared Euclidean distance from this location to the given coordinates.
-     *
-     * @param coordinates Coordinates to which the distance is calculated.
-     * @return The squared distance from this location to the given coordinates.
-     */
-    public int calculateDistanceSquared(Coordinates coordinates) {
-        int dx = coordinates.getX() - xCoordinate;
-        int dy = coordinates.getY() - yCoordinate;
-        return dx * dx + dy * dy;
-    }
+    // PostGIS Point type with SRID 0 Euclidean coordinates)
+    @Column(columnDefinition = "geometry(Point, 0)", nullable = false)
+    private Point coords;
 
-    /**
-     * Calculates the Euclidean distance from this location to the given coordinates.
-     * @param coordinates Coordinates to which the distance is calculated.
-     * @return The distance from this location to the given coordinates.
-     */
-    public double calculateDistance(Coordinates coordinates) {
-        return Math.sqrt(calculateDistanceSquared(coordinates));
-    }
+    @Column(nullable = false)
+    private double radius;
 
-    /**
-     * Helper method to calculate the squared radius of this location
-     * @return The squared radius of this location.
-     */
-    public int calculateRadiusSquared() {
-        return radius * radius;
-    }
+    @Column(length = 50)
+    private String openingHours;
 }

@@ -5,6 +5,10 @@ import de.boniel.apps.restaurantlocator.dto.LocationDto;
 import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
 import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.model.Location;
+import de.boniel.apps.restaurantlocator.model.LocationWithDistance;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,17 +23,18 @@ public interface LocationMapper {
 
     LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
 
-    @Mapping(target = "id", source = "id") // Uses "id" parameter. Ignores request.id
-    @Mapping(target = "xCoordinate", source = "request.coordinates.x")
-    @Mapping(target = "yCoordinate", source = "request.coordinates.y")
+    GeometryFactory geometryFactory = new GeometryFactory();
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "coords", source = "request.coordinates", qualifiedByName = "mapToCoordinates")
     Location mapToLocation(UUID id, LocationDto request);
 
-    @Mapping(target = "coordinates.x", source = "XCoordinate")
-    @Mapping(target = "coordinates.y", source = "YCoordinate")
+    @Mapping(target = "coordinates.x", source = "coords.x")
+    @Mapping(target = "coordinates.y", source = "coords.y")
     LocationDto mapToLocationDto(Location location);
 
     default LocationSearchResponseDto mapToLocationSearchResponseDto(Coordinates userCoordinates,
-                                                                     List<Location> locations) {
+                                                                     List<LocationWithDistance> locations) {
         return LocationSearchResponseDto.builder()
                 .userLocation(userCoordinates)
                 .locations(locations.stream()
@@ -39,14 +44,16 @@ public interface LocationMapper {
                 .build();
     }
 
-    @Mapping(target = "coordinates.x", source = "XCoordinate")
-    @Mapping(target = "coordinates.y", source = "YCoordinate")
-    @Mapping(target = "distance", source = "location", qualifiedByName = "mapDistance")
-    LocationSearchResultDto mapToLocationSearchResponseDto(Location location, @Context Coordinates userCoordinates);
+    @Mapping(target = "coordinates.x", source = "x")
+    @Mapping(target = "coordinates.y", source = "y")
+    @Mapping(target = "distance", source = "location.distance")
+    LocationSearchResultDto mapToLocationSearchResponseDto(LocationWithDistance location, @Context Coordinates userCoordinates);
 
-    @Named("mapDistance")
-    default double mapDistance(Location location, @Context Coordinates userCoordinates) {
-        return location.calculateDistance(userCoordinates);
+    @Named("mapToCoordinates")
+    default Point mapToCoordinates(Coordinates coordinates) {
+        if (coordinates == null) {
+            return null;
+        }
+        return geometryFactory.createPoint(new Coordinate(coordinates.getX(), coordinates.getY()));
     }
-
 }

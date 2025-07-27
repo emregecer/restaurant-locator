@@ -3,12 +3,14 @@ package de.boniel.apps.restaurantlocator.service;
 import de.boniel.apps.restaurantlocator.dto.Coordinates;
 import de.boniel.apps.restaurantlocator.dto.LocationDto;
 import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResponseDto;
-import de.boniel.apps.restaurantlocator.dto.response.LocationSearchResultDto;
 import de.boniel.apps.restaurantlocator.fault.ApiException;
 import de.boniel.apps.restaurantlocator.model.Location;
+import de.boniel.apps.restaurantlocator.model.LocationWithDistance;
 import de.boniel.apps.restaurantlocator.repository.LocationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,8 +24,7 @@ import static de.boniel.apps.restaurantlocator.fault.ErrorType.LOCATION_NOT_FOUN
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LocationServiceTest {
@@ -35,6 +36,8 @@ class LocationServiceTest {
     private LocationService service;
 
     private final UUID TEST_ID = UUID.randomUUID();
+
+    private final GeometryFactory geometryFactory = new GeometryFactory();
 
     @Test
     void shouldReturnAllLocationsAsDtos() {
@@ -55,46 +58,31 @@ class LocationServiceTest {
     void shouldReturnOnlyNearbyLocationsSortedByDistance() {
         Coordinates userCoordinates = new Coordinates(3, 2);
 
-        Location loc1 = Location.builder()
-                .id(UUID.randomUUID())
-                .name("Loc1")
-                .xCoordinate(2)
-                .yCoordinate(2)
-                .radius(2) // radius * radius = 4
-                .build(); // distance * distance = 1 → inside
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
 
-        Location loc2 = Location.builder()
-                .id(UUID.randomUUID())
-                .name("Loc2")
-                .xCoordinate(2)
-                .yCoordinate(3)
-                .radius(1) // radius * radius = 1
-                .build(); // distance * distance = 2 → OUTSIDE
+        LocationWithDistance loc1 = mock(LocationWithDistance.class);
+        when(loc1.getId()).thenReturn(id1);
+        when(loc1.getName()).thenReturn("Loc1");
+        when(loc1.getX()).thenReturn(2.0);
+        when(loc1.getY()).thenReturn(2.0);
+        when(loc1.getDistance()).thenReturn(1.0);
 
-        Location loc3 = Location.builder()
-                .id(UUID.randomUUID())
-                .name("Loc3")
-                .xCoordinate(5)
-                .yCoordinate(2)
-                .radius(5) // radius * radius = 25
-                .build(); // distance * distance = 4 → inside
+        LocationWithDistance loc2 = mock(LocationWithDistance.class);
+        when(loc2.getId()).thenReturn(id2);
+        when(loc2.getName()).thenReturn("Loc2");
+        when(loc2.getX()).thenReturn(2.0);
+        when(loc2.getY()).thenReturn(3.0);
+        when(loc2.getDistance()).thenReturn(Math.sqrt(2));
 
-        when(repository.findAll()).thenReturn(List.of(loc1, loc2, loc3));
+        when(repository.findLocationsWithinRadiusWithDistance(userCoordinates.getX(), userCoordinates.getY()))
+                .thenReturn(List.of(loc1, loc2));
 
         LocationSearchResponseDto response = service.searchNearbyLocations(userCoordinates);
 
         assertThat(response).isNotNull();
         assertThat(response.getUserLocation()).isEqualTo(userCoordinates);
         assertThat(response.getLocations()).hasSize(2);
-
-        LocationSearchResultDto first = response.getLocations().get(0);
-        LocationSearchResultDto second = response.getLocations().get(1);
-
-        assertThat(first.getName()).isEqualTo(loc1.getName());
-        assertThat(first.getDistance()).isEqualTo(1.0);
-
-        assertThat(second.getName()).isEqualTo(loc3.getName());
-        assertThat(second.getDistance()).isEqualTo(2.0);
     }
 
     @Test
@@ -142,8 +130,8 @@ class LocationServiceTest {
         Location saved = captor.getValue();
 
         assertEquals(TEST_ID, saved.getId());
-        assertEquals(15, saved.getXCoordinate());
-        assertEquals(25, saved.getYCoordinate());
+        assertEquals(15, saved.getCoords().getX());
+        assertEquals(25, saved.getCoords().getY());
         assertEquals(3, saved.getRadius());
     }
 
@@ -152,8 +140,7 @@ class LocationServiceTest {
                 .id(TEST_ID)
                 .name("Test Place")
                 .type("Restaurant")
-                .xCoordinate(10)
-                .yCoordinate(20)
+                .coords(geometryFactory.createPoint(new Coordinate(10, 20)))
                 .radius(5)
                 .openingHours("10-22")
                 .image("http://img")

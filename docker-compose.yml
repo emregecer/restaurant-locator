@@ -1,0 +1,31 @@
+services:
+  postgres-db:
+    image: postgis/postgis:15-3.4
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  spring-app:
+    build: .
+    container_name: spring-boot-app
+    restart: always
+    depends_on:
+      - postgres-db
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_NAME: testdb
+      DB_USER: appuser
+      DB_PASSWORD: apppass
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
