@@ -28,7 +28,7 @@ public interface LocationMapper {
     GeometryFactory geometryFactory = new GeometryFactory();
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "coordinates", source = "request.coordinates", qualifiedByName = "mapToCoordinates")
+    @Mapping(target = "coordinates", source = "request.coordinates", qualifiedByName = "mapToPoint")
     Location mapToLocation(UUID id, LocationDto request);
 
     LocationDto mapToLocationDto(Location location);
@@ -49,8 +49,8 @@ public interface LocationMapper {
     @Mapping(target = "distance", source = "location.distance")
     LocationSearchResultDto mapToLocationSearchResponseDto(LocationWithDistance location, @Context Coordinates userCoordinates);
 
-    @Named("mapToCoordinates")
-    default Point mapToCoordinates(Coordinates userCoordinates) {
+    @Named("mapToPoint")
+    default Point mapToPoint(Coordinates userCoordinates) {
         return ofNullable(userCoordinates)
                 .map(coordinates -> geometryFactory.createPoint(new Coordinate(coordinates.getX(), coordinates.getY())))
                 .orElse(null);
