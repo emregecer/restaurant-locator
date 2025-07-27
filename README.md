@@ -10,6 +10,7 @@ A Spring Boot application to locate nearby restaurants
 
 ## Technical Stack
 - Java 24
+- Maven 3+
 - Spring Boot 3.5.4
 - Spring Validator for validating incoming requests
 - Lombok and MapStruct for reducing boilerplate code
