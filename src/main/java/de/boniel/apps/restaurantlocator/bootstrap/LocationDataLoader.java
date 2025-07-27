@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -38,7 +37,7 @@ public class LocationDataLoader implements ApplicationRunner {
 
             locations.forEach(location -> {
                 try {
-                    locationService.upsertLocation(UUID.randomUUID(), location);
+                    locationService.upsertLocation(location.getId(), location);
                     log.info("Location {} is loaded successfully. ID: {}", location.getName(), location.getId());
                 } catch (Exception ex) {
                     log.error("Skipping invalid location {} -> {}", location.getName(), ex.getMessage());

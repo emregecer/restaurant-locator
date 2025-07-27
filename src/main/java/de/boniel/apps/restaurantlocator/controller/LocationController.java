@@ -18,14 +18,16 @@ public class LocationController {
 
     private final LocationService locationService;
 
-    //TODO: To be removed in v2
-    @Operation(summary = "getAllLocations")
+    @Operation(summary = "getAllLocations", description = "For test purposes only, returns all locations")
     @GetMapping("/v1/locations")
     public List<LocationDto> getLocations() {
         return locationService.findAll();
     }
 
-    @Operation(summary = "searchNearbyLocations", description = "Search locations within a radius of the locations")
+    @Operation(
+            summary = "searchNearbyLocations",
+            description = "Search locations within a radius of the locations by calculation Euclidean distance"
+    )
     @GetMapping("/v1/locations/search")
     public LocationSearchResponseDto searchNearbyLocations(@RequestParam int x, @RequestParam int y) {
         return locationService.searchNearbyLocations(new Coordinates(x, y));
