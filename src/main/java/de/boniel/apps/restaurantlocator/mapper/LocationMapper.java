@@ -44,8 +44,8 @@ public interface LocationMapper {
                 .build();
     }
 
-    @Mapping(target = "coordinates.x", source = "x")
-    @Mapping(target = "coordinates.y", source = "y")
+    @Mapping(target = "coordinates.x", source = "location.x")
+    @Mapping(target = "coordinates.y", source = "location.y")
     @Mapping(target = "distance", source = "location.distance")
     LocationSearchResultDto mapToLocationSearchResponseDto(LocationWithDistance location, @Context Coordinates userCoordinates);
 
