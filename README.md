@@ -12,6 +12,8 @@ A Spring Boot application to locate nearby restaurants
 - Maven 3+
 - Spring Boot 3.5.4
 - Postgis15 (PostgreSQL15 with spatial index) for persistence and spatial-indexed location coordinates
+- Spring Data JPA for data repository layer
+- Hibernate-spatial for ORM (for geometrical mappings)
 - Spring Validator for validating incoming requests
 - Lombok and MapStruct for reducing boilerplate code
 - Junit 5, Mockito, AssertJ and TestContainers for unit and integration testing
@@ -35,7 +37,7 @@ A Spring Boot application to locate nearby restaurants
 - For single responsibility and separation of concerns, the application is structured into layers:
   - Controller: Handles HTTP requests and responses.
   - Service: Contains business logic.
-  - Repository: Manages data access. Used an in-memory repository for simplicity for now
+  - Repository: Manages data access. Contaibs JPA repositories
   - Mapper: Converts between model and DTO objects to separate data representation from core model.
   - Bootstrap: Contains LocationDataLoader to load initial data from JSON file into the in-memory repository.
   - Model: Represents the data structure of the application.
